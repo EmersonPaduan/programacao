@@ -1,55 +1,74 @@
 
 public class Robo {
     private int posX, posY;
-    private char direcao;
-    private int maxX, maxY;
+    private Direcao direcao;
+    private Arena arena;
 
-    public Robo(int maxX, int maxY) {
-        this.maxX = maxX;
-        this.maxY = maxY;
-        direcao = 'N';
+    public Robo(Arena arena) {
+        this.arena = arena;
+        direcao = Direcao.NORTE;
     }
 
-    public Robo(int maxX, int maxY, int posX, int posY) {
-        this.maxX = maxX;
-        this.maxY = maxY;
+    public Robo(Arena arena, int posX, int posY) {
+        this.arena = arena;
         this.posX = posX;
         this.posY = posY;
-        direcao = 'N';
+        direcao = Direcao.NORTE;
     }
 
     public String mostrarPosicao() {
         return posX + ", " + posY + " : " + direcao;
     }
 
-    public void girarPara(char direcao) {
-        if (direcao == 'N' || direcao == 'S' || direcao == 'L' || direcao == 'O') {
-            this.direcao = direcao;
+    public void girarPara(Direcao direcao) {
+        this.direcao = direcao;
+    }
+
+    public boolean andar() {
+        switch (direcao) {
+            case NORTE:
+                return moverNorte();
+            case SUL:
+                return moverSul();
+            case LESTE:
+                return moverLeste();
+            case OESTE:
+                return moverOeste();
+            default:
+                return false;
         }
     }
 
-    public void andar() {
-        switch (direcao) {
-            case 'N':
-                if (posY < maxY) {
-                    posY++;
-                }
-                break;
-            case 'S':
-                if (posY > -maxY) {
-                    posY--;
-                }
-                break;
-            case 'L':
-                if (posX < maxX) {
-                    posX++;
-                }
-                break;
-            case 'O':
-                if (posX > -maxX) {
-                    posX--;
-                }
-                break;
+    private boolean moverSul() {
+        if (posY > -arena.getMaxY()) {
+            posY--;
+            return true;
         }
+        return false;
     }
+
+    private boolean moverNorte() {
+        if (posY < arena.getMaxY()) {
+            posY++;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean moverLeste() {
+        if (posX < arena.getMaxX()) {
+            posX++;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean moverOeste() {
+        if (posX > -arena.getMaxX()) {
+            posX--;
+            return true;
+        }
+        return false;
+    }
+
 }
